@@ -1,0 +1,13 @@
+@font-face {
+    src: url("fonts/crackman-front.ttf");
+}
+
+.menu-scene {
+    -fx-background-color: #192841;
+}
+
+.menu-label {
+    -fx-text-fill: #ffc;
+    -fx-font-size: 100px;
+    -fx-font-family: 'Crackman';
+}

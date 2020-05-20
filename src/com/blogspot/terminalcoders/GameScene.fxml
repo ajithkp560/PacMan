@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.net.URL?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.blogspot.terminalcoders.GameController"
+            maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="750.0" styleClass="game-scene" fx:id="gameView" onKeyPressed="#KeyPressed">
+    <Button fx:id="startBtn" layoutX="20" layoutY="20" styleClass="btn"  onAction="#startPlay" />
+    <Label fx:id="lifeLbl" layoutX="200" layoutY="30" textAlignment="LEFT" styleClass="lbl" visible="true" />
+    <Label fx:id="scoreLbl" layoutX="480" layoutY="30" textAlignment="RIGHT" styleClass="lbl" visible="true" />
+    <AnchorPane layoutX="120" layoutY="5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="500.0" fx:id="gameGfx" />
+    <Label fx:id="winLbl" layoutX="110" layoutY="310" textAlignment="CENTER" text="You Won!!!" styleClass="win-lbl" visible="false" />
+    <Label fx:id="failLbl" layoutX="90" layoutY="310" textAlignment="CENTER" text="You Failed!!!" styleClass="win-lbl" visible="false" />
+    <stylesheets>
+        <URL value="@GameStyle.css" />
+    </stylesheets>
+</AnchorPane>

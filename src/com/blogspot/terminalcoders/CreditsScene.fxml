@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.net.URL?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.blogspot.terminalcoders.CreditsController"
+            maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="750.0" styleClass="credits-scene">
+    <stylesheets>
+        <URL value="@CreditsStyle.css" />
+    </stylesheets>
+    <ImageView id="auth" pickOnBounds="true" layoutX="180" layoutY="5" scaleX="0.5" scaleY="0.5">
+        <image>
+            <Image url="@assets/Author.png" preserveRatio="true" smooth="true" />
+        </image>
+    </ImageView>
+    <Label fx:id="authLbl" layoutX="230" layoutY="310" textAlignment="CENTER" text="Authored By" styleClass="auth-lbl" />
+    <Label fx:id="authorLbl" layoutX="110" layoutY="350" styleClass="author-lbl" text="AJITH KP" textAlignment="CENTER" />
+    <Button fx:id="backBtn" style="-fx-background-color:rgba(0,0,0,0,0);" layoutX="225.0" layoutY="500.0" scaleX="0.8" scaleY="0.8" onAction="#backClicked">
+        <graphic>
+            <ImageView id="sub" pickOnBounds="true">
+                <image>
+                    <Image url="@assets/Back.png" preserveRatio="true" smooth="true" />
+                </image>
+            </ImageView>
+        </graphic>
+    </Button>
+</AnchorPane>

@@ -1,0 +1,24 @@
+@font-face {
+    src: url("fonts/crackman-front.ttf");
+}
+
+@font-face {
+    src: url("fonts/Adca.ttf");
+}
+
+.credits-scene {
+    -fx-background-color: #192841;
+}
+
+.author-lbl {
+    -fx-font-family: "CrackMan";
+    -fx-font-size: 100px;
+}
+
+.auth-lbl {
+    -fx-font-family: "adca";
+    -fx-font-size: 50px;
+    -fx-text-fill: "#24385c";
+    -fx-stroke: "#91aad4";
+    -fx-stroke-width: 5;
+}

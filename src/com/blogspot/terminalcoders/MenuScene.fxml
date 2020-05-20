@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<AnchorPane id="AnchorPane" fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="750.0" styleClass="menu-scene" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="com.blogspot.terminalcoders.MenuController">
+    <stylesheets>
+        <URL value="@MenuStyle.css" />
+    </stylesheets>
+   <children>
+       <Label fx:id="title" styleClass="menu-label" alignment="CENTER" layoutX="150.0" layoutY="100.0" text="PACMAN" textAlignment="CENTER"  />
+       <Button fx:id="playBtn" style="-fx-background-color:rgba(0,0,0,0,0);" layoutX="225.0" layoutY="300.0" onAction="#startClicked">
+           <graphic>
+               <ImageView id="sub" pickOnBounds="true">
+                   <image>
+                       <Image url="@assets/Play.png" preserveRatio="true" smooth="true" />
+                   </image>
+               </ImageView>
+           </graphic>
+       </Button>
+       <Button fx:id="creditsBtn" style="-fx-background-color:rgba(0,0,0,0,0);" layoutX="225.0" layoutY="450.0" onAction="#creditsClicked">
+           <graphic>
+               <ImageView id="sub" pickOnBounds="true">
+                   <image>
+                       <Image url="@assets/Credits.png" preserveRatio="true" smooth="true" />
+                   </image>
+               </ImageView>
+           </graphic>
+       </Button>
+       <ImageView fx:id="pacMan" layoutY="250" layoutX="100">
+           <image>
+               <Image url="@pacman/Pac00.gif" preserveRatio="true" smooth="true" />
+           </image>
+       </ImageView>
+   </children>
+</AnchorPane>

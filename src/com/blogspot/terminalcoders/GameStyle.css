@@ -1,0 +1,35 @@
+@font-face {
+    src: url("fonts/crackman-front.ttf");
+}
+
+@font-face {
+    src: url("fonts/Adca.ttf");
+}
+
+.game-scene {
+    -fx-background-color: #192841;
+}
+
+.win-lbl {
+    -fx-font-family: "adca";
+    -fx-font-size: 100px;
+    -fx-text-fill: "#3291a8";
+    -fx-stroke: "#fcfcfc";
+    -fx-stroke-width: 5;
+}
+
+.lbl {
+    -fx-font-family: "adca";
+    -fx-font-size: 30px;
+    -fx-text-fill: "#fcfcfc";
+    -fx-stroke: "#c0c0c0";
+    -fx-stroke-width: 5;
+}
+
+.btn {
+    -fx-font-family: "adca";
+    -fx-font-size: 30px;
+    -fx-text-fill: "#0c0c0c";
+    -fx-stroke: "#fcfcfc";
+    -fx-stroke-width: 5;
+}
