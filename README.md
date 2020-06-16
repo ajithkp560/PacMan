@@ -1,4 +1,4 @@
-"# PacMan" 
+# PacMan
 
 > PacMan game in JavaFX
 > Naive Ghost Code
