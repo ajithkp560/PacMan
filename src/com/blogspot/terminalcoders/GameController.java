@@ -39,35 +39,30 @@ import java.net.URL;
 import java.util.*;
 
 public class GameController  implements Initializable, Runnable {
-    @FXML
-    AnchorPane gameView, gameGfx;
-
-    @FXML
-    Label winLbl, failLbl, lifeLbl, scoreLbl;
-
-    @FXML
-    Button startBtn;
-
     final static int rowX = 19, colY = 22, boxSize = 24;
     final static long superTimeMillis = 5000;
-    int startX = 1*boxSize, startY = 4*boxSize;
-    static int Px, Py, pDir, pDirTmp, pInd, ghostDir[], ghostIndex[], ghostPos[][], numGhosts = 3, bigCircleRad = 6, animBigCir = 0, pacSpeed = 3, ghostSpeed = 3, gateX, gateY, ghostHome[][] = new int[3][2], lifePending = 3, iniPx, iniPy;
     static final int pacNSpeed = 3, pacSSpeed = 4, maxGhosts = 6, newGhostTimeOut=20000;
+    static int Px, Py, pDir, pDirTmp, pInd, ghostDir[], ghostIndex[], ghostPos[][], numGhosts = 3, bigCircleRad = 6, animBigCir = 0, pacSpeed = 3, ghostSpeed = 3, gateX, gateY, ghostHome[][] = new int[3][2], lifePending = 3, iniPx, iniPy;
     static int refreshRate = 50;
     static boolean scared = false, recover=false, start=false, superPac=false, dirChng=false, newGhCreated=true;
     static boolean ghostOut[] = new boolean[maxGhosts], ghostBlocked[] = new boolean[maxGhosts];
     static char map[][] = new char[colY][rowX];
     static int score = 0, numEggs = 0;
     static long cMillis = 0, lastBigEgg = 0;
-
-    //HashMap<ImageView, Ghost> ghosts = new HashMap<ImageView, Ghost>();
-    StockImages wall = new StockImages();
-    MyCanvas canvas = new MyCanvas(700, 700);
-
     static Image[][] pacMans;
     static Image[][] ghosts;
     static Image[][] scGhost;
     static Image[][] rcGhost;
+    @FXML
+    AnchorPane gameView, gameGfx;
+    @FXML
+    Label winLbl, failLbl, lifeLbl, scoreLbl;
+    @FXML
+    Button startBtn;
+    int startX = 1*boxSize, startY = 4*boxSize;
+    //HashMap<ImageView, Ghost> ghosts = new HashMap<ImageView, Ghost>();
+    StockImages wall = new StockImages();
+    MyCanvas canvas = new MyCanvas(700, 700);
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -102,25 +97,25 @@ public class GameController  implements Initializable, Runnable {
     }
 
     private void repaint() {
-        try {
-            while (true) {
+        while (true) {
+            try {
                 Thread.sleep(refreshRate);
-                canvas.repaint();
-                if(lifePending>0) {
-                    if (start) {
-                        animatePacMan();
-                        animateGhost();
-                        animateFood();
-                        movePacMan();
-                        moveGhosts();
-                        updateScoreLife();
-                    }
-                }
-                //movePacMan();
+            } catch (Exception ex){
+                ex.printStackTrace();
+                System.out.println(ex.getMessage());
             }
-        } catch (Exception ex){
-            ex.printStackTrace();
-            System.out.println(ex.getMessage());
+            canvas.repaint();
+            if(lifePending>0) {
+                if (start) {
+                    animatePacMan();
+                    animateGhost();
+                    animateFood();
+                    movePacMan();
+                    moveGhosts();
+                    updateScoreLife();
+                }
+            }
+            //movePacMan();
         }
     }
 
@@ -142,138 +137,6 @@ public class GameController  implements Initializable, Runnable {
         start=!start;
         String text = start?"PAUSE":"START";
         startBtn.setText(text);
-    }
-
-    private class MyCanvas extends Canvas{
-        boolean initial = true;
-        public MyCanvas(int width, int height){
-            this.setWidth(width);
-            this.setHeight(height);
-            try {
-                InputStream in = getClass().getResourceAsStream("assets/Map.txt");
-                BufferedReader fr = new BufferedReader(new InputStreamReader(in));
-                //BufferedReader fr = new BufferedReader(new InputStreamReader(Class.forName("com.blogspot.terminalcoders.GameController").getClassLoader().getResourceAsStream(this.getClass().getResource("assets/Map.txt").toString())));
-                //FileReader fr = new FileReader(new File(this.getClass().getResource("assets/Map.txt").toURI()));
-                int i = 0, j = 0, x;
-                while ((x = fr.read()) != -1) {
-                    if (x == 13) {
-                        j = 0;
-                        i++;
-                        System.out.println();
-                    } else if (x != 10) {
-                        map[i][j++] = (char) x;
-                        System.out.print(map[i][j-1]+":["+i+","+(j-1)+"] ");
-                    }
-                }
-            } catch (Exception ex){
-                ex.printStackTrace();
-                System.out.println(ex.getMessage());
-            }
-        }
-        public void repaint() {
-            GraphicsContext gc = this.getGraphicsContext2D();
-            gc.clearRect(0, 0, 700, 700);
-            numEggs = 0;
-            int gIndex = 0;
-            try {
-
-                for (int i = 0; i < colY; i++) {
-                    for (int j = 0; j < rowX; j++) {
-                        char c = map[i][j];
-                        //System.out.print(c);
-                        if (c == '#') {
-                            if(scared) {
-                                gc.drawImage(wall.getScaredWallImg(), startX + j * boxSize, startY + i * boxSize, boxSize, boxSize);
-                            } else {
-                                gc.drawImage(wall.getWallImage(), startX + j * boxSize, startY + i * boxSize, boxSize, boxSize);
-                            }
-                        } else if (c == 'P') {
-                            Px = j * boxSize;
-                            Py = i * boxSize;
-                            iniPx = j * boxSize;
-                            iniPy = i * boxSize;
-                            map[i][j] = '-';
-                            //gc.drawImage(pm.getImage(), startX+j*boxWidth, startY+i*boxHeight, boxWidth, boxHeight);
-                        } else if (c == 'G') {
-                            ghostPos[gIndex][0] = j * boxSize;
-                            ghostPos[gIndex][1] = i * boxSize;
-                            ghostHome[gIndex][0] = j;
-                            ghostHome[gIndex][1] = i;
-                            gIndex = gIndex+1;
-                            map[i][j] = '-';
-                            //gc.drawImage(ghost.getImage(), j*boxWidth, i*boxHeight, boxWidth, boxHeight);
-                        }
-                        else if (c == 'O') {
-                            gc.setFill(Color.rgb(15, 255, 200));
-                            gc.fillOval(startX + j * boxSize + boxSize/2 - (bigCircleRad+animBigCir)/2, startY + i * boxSize + boxSize/2 - (bigCircleRad+animBigCir)/2, bigCircleRad + animBigCir, bigCircleRad + animBigCir);
-                            gc.fill();
-                            gc.stroke();
-                            numEggs++;
-                        }
-                        else if (c == '.') {
-                            gc.setFill(Color.rgb(255, 15, 50));
-                            gc.fillOval(startX + j * boxSize + boxSize/2 - 3/2, startY + i * boxSize + boxSize/2 - 3/2, 3, 3);
-                            gc.fill();
-                            gc.stroke();
-                            numEggs++;
-                        }
-                        else if (c == '&') {
-                            gc.drawImage(wall.getDoorImg(), startX + j * boxSize, startY + i * boxSize, boxSize, boxSize);
-                            gateX = j;
-                            gateY = i;
-                            map[i][j] = 'X';
-                        }
-                    }
-                    //System.out.println();
-                }
-                if(initial) {
-                    for (int i = 0; i < pacMans.length; i++) {
-                        for (int j = 0; j < pacMans[pDir].length; j++) {
-                            gc.drawImage(pacMans[i][j], Px, Py, boxSize, boxSize);
-                        }
-                    }
-                    for(int i=0;i<ghosts.length;i++){
-                        for(int j=0;j<ghosts[0].length;j++){
-                            gc.drawImage(ghosts[i][j], ghostPos[0][0], ghostPos[0][1], boxSize, boxSize);
-                        }
-                    }
-                    System.out.println("Initial");
-                    initial = false;
-                }
-                gc.drawImage(pacMans[pDir][pInd], startX + Px, startY + Py, boxSize, boxSize);
-                //gc.drawImage(ghosts[ghostDir[0]][ghostIndex[0]], Px, Py, boxWidth, boxHeight);
-                for (int i=0;i<numGhosts;i++){
-                    if (scared) {
-                        if (recover) {
-                            gc.drawImage(rcGhost[ghostDir[i]][ghostIndex[i]], startX + ghostPos[i][0], startY + ghostPos[i][1], boxSize, boxSize);
-                        } else {
-                            gc.drawImage(scGhost[ghostDir[i]][ghostIndex[i]], startX + ghostPos[i][0], startY + ghostPos[i][1], boxSize, boxSize);
-                        }
-                    }
-                    else{
-                        gc.drawImage(ghosts[ghostDir[i]][ghostIndex[i]], startX + ghostPos[i][0], startY + ghostPos[i][1], boxSize, boxSize);
-                    }
-                    //System.out.println(ghosts.length);
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                System.out.println();
-            }
-        }
-        @Override
-        public boolean isResizable() {
-            return false;
-        }
-
-        @Override
-        public double prefWidth(double height) {
-            return getWidth();
-        }
-
-        @Override
-        public double prefHeight(double width) {
-            return getHeight();
-        }
     }
 
     private void initGhosts(){
@@ -905,7 +768,7 @@ public class GameController  implements Initializable, Runnable {
             }
         }
     }
-    
+
     private void updateScoreLife(){
         System.out.println("Life: "+lifePending+" , Score: "+score);
         Platform.runLater(new Runnable() {
@@ -917,10 +780,142 @@ public class GameController  implements Initializable, Runnable {
             }
         });
     }
-
+    
     @Override
     public void run() {
         System.out.println("Running...");
         repaint();
+    }
+
+    private class MyCanvas extends Canvas{
+        boolean initial = true;
+        public MyCanvas(int width, int height){
+            this.setWidth(width);
+            this.setHeight(height);
+            try {
+                InputStream in = getClass().getResourceAsStream("assets/Map.txt");
+                BufferedReader fr = new BufferedReader(new InputStreamReader(in));
+                //BufferedReader fr = new BufferedReader(new InputStreamReader(Class.forName("com.blogspot.terminalcoders.GameController").getClassLoader().getResourceAsStream(this.getClass().getResource("assets/Map.txt").toString())));
+                //FileReader fr = new FileReader(new File(this.getClass().getResource("assets/Map.txt").toURI()));
+                int i = 0, j = 0, x;
+                while ((x = fr.read()) != -1) {
+                    if (x == 13) {
+                        j = 0;
+                        i++;
+                        System.out.println();
+                    } else if (x != 10) {
+                        map[i][j++] = (char) x;
+                        System.out.print(map[i][j-1]+":["+i+","+(j-1)+"] ");
+                    }
+                }
+            } catch (Exception ex){
+                ex.printStackTrace();
+                System.out.println(ex.getMessage());
+            }
+        }
+        public void repaint() {
+            GraphicsContext gc = this.getGraphicsContext2D();
+            gc.clearRect(0, 0, 700, 700);
+            numEggs = 0;
+            int gIndex = 0;
+            try {
+
+                for (int i = 0; i < colY; i++) {
+                    for (int j = 0; j < rowX; j++) {
+                        char c = map[i][j];
+                        //System.out.print(c);
+                        if (c == '#') {
+                            if(scared) {
+                                gc.drawImage(wall.getScaredWallImg(), startX + j * boxSize, startY + i * boxSize, boxSize, boxSize);
+                            } else {
+                                gc.drawImage(wall.getWallImage(), startX + j * boxSize, startY + i * boxSize, boxSize, boxSize);
+                            }
+                        } else if (c == 'P') {
+                            Px = j * boxSize;
+                            Py = i * boxSize;
+                            iniPx = j * boxSize;
+                            iniPy = i * boxSize;
+                            map[i][j] = '-';
+                            //gc.drawImage(pm.getImage(), startX+j*boxWidth, startY+i*boxHeight, boxWidth, boxHeight);
+                        } else if (c == 'G') {
+                            ghostPos[gIndex][0] = j * boxSize;
+                            ghostPos[gIndex][1] = i * boxSize;
+                            ghostHome[gIndex][0] = j;
+                            ghostHome[gIndex][1] = i;
+                            gIndex = gIndex+1;
+                            map[i][j] = '-';
+                            //gc.drawImage(ghost.getImage(), j*boxWidth, i*boxHeight, boxWidth, boxHeight);
+                        }
+                        else if (c == 'O') {
+                            gc.setFill(Color.rgb(15, 255, 200));
+                            gc.fillOval(startX + j * boxSize + boxSize/2 - (bigCircleRad+animBigCir)/2, startY + i * boxSize + boxSize/2 - (bigCircleRad+animBigCir)/2, bigCircleRad + animBigCir, bigCircleRad + animBigCir);
+                            gc.fill();
+                            gc.stroke();
+                            numEggs++;
+                        }
+                        else if (c == '.') {
+                            gc.setFill(Color.rgb(255, 15, 50));
+                            gc.fillOval(startX + j * boxSize + boxSize/2 - 3/2, startY + i * boxSize + boxSize/2 - 3/2, 3, 3);
+                            gc.fill();
+                            gc.stroke();
+                            numEggs++;
+                        }
+                        else if (c == '&') {
+                            gc.drawImage(wall.getDoorImg(), startX + j * boxSize, startY + i * boxSize, boxSize, boxSize);
+                            gateX = j;
+                            gateY = i;
+                            map[i][j] = 'X';
+                        }
+                    }
+                    //System.out.println();
+                }
+                if(initial) {
+                    for (int i = 0; i < pacMans.length; i++) {
+                        for (int j = 0; j < pacMans[pDir].length; j++) {
+                            gc.drawImage(pacMans[i][j], Px, Py, boxSize, boxSize);
+                        }
+                    }
+                    for(int i=0;i<ghosts.length;i++){
+                        for(int j=0;j<ghosts[0].length;j++){
+                            gc.drawImage(ghosts[i][j], ghostPos[0][0], ghostPos[0][1], boxSize, boxSize);
+                        }
+                    }
+                    System.out.println("Initial");
+                    initial = false;
+                }
+                gc.drawImage(pacMans[pDir][pInd], startX + Px, startY + Py, boxSize, boxSize);
+                //gc.drawImage(ghosts[ghostDir[0]][ghostIndex[0]], Px, Py, boxWidth, boxHeight);
+                for (int i=0;i<numGhosts;i++){
+                    if (scared) {
+                        if (recover) {
+                            gc.drawImage(rcGhost[ghostDir[i]][ghostIndex[i]], startX + ghostPos[i][0], startY + ghostPos[i][1], boxSize, boxSize);
+                        } else {
+                            gc.drawImage(scGhost[ghostDir[i]][ghostIndex[i]], startX + ghostPos[i][0], startY + ghostPos[i][1], boxSize, boxSize);
+                        }
+                    }
+                    else{
+                        gc.drawImage(ghosts[ghostDir[i]][ghostIndex[i]], startX + ghostPos[i][0], startY + ghostPos[i][1], boxSize, boxSize);
+                    }
+                    //System.out.println(ghosts.length);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                System.out.println();
+            }
+        }
+        @Override
+        public boolean isResizable() {
+            return false;
+        }
+
+        @Override
+        public double prefWidth(double height) {
+            return getWidth();
+        }
+
+        @Override
+        public double prefHeight(double width) {
+            return getHeight();
+        }
     }
 }
