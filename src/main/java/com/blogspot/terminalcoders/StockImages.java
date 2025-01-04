@@ -9,10 +9,11 @@ public class StockImages {
     Image scaredWallImg = null;
     StockImages(){
         try {
-            this.wallImg = new Image(this.getClass().getResource("assets/wall.png").toString());
-            this.doorImg = new Image(this.getClass().getResource("assets/door.png").toString());
-            this.scaredWallImg = new Image(this.getClass().getResource("assets/scaredwall.png").toString());
+            this.wallImg = new Image(this.getClass().getResource("/assets/wall.png").toString());
+            this.doorImg = new Image(this.getClass().getResource("/assets/door.png").toString());
+            this.scaredWallImg = new Image(this.getClass().getResource("/assets/scaredwall.png").toString());
         } catch (Exception ex){
+            ex.printStackTrace();
             System.out.println(ex.getMessage());
         }
     }

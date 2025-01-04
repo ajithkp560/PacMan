@@ -75,6 +75,8 @@ public class GameController  implements Initializable, Runnable {
         });
         initGhosts();
         startBtn.setText("START");
+
+        gameView.requestFocus();
     }
 
     @FXML
@@ -116,6 +118,7 @@ public class GameController  implements Initializable, Runnable {
                 }
             }
             //movePacMan();
+            gameView.requestFocus();
         }
     }
 
@@ -327,7 +330,7 @@ public class GameController  implements Initializable, Runnable {
                     if (map[boxY][boxX + 1] != '#') {
                         if(map[boxY][boxX + 1] == 'X'){
                             gateDir = 0;
-                            System.out.println("GATE: "+gateDir);
+                            System.out.println("1 GATE: "+gateDir);
                         } else {
                             if(ghostDir[i]==1 || ghostDir[i]==3) {
                                 wayAvailable = true;
@@ -344,7 +347,7 @@ public class GameController  implements Initializable, Runnable {
                     if (map[boxY - 1][boxX] != '#') {
                         if(map[boxY - 1][boxX] == 'X'){
                             gateDir = 1;
-                            System.out.println("GATE: "+gateDir);
+                            System.out.println("2 GATE: "+gateDir);
                         } else {
                             if(ghostDir[i]==0 || ghostDir[i]==2) {
                                 wayAvailable = true;
@@ -361,7 +364,7 @@ public class GameController  implements Initializable, Runnable {
                     if (map[boxY][boxX - 1] != '#') {
                         if (map[boxY][boxX - 1] == 'X') {
                             gateDir = 2;
-                            System.out.println("GATE: "+gateDir);
+                            System.out.println("3 GATE: "+gateDir);
                         } else {
                             if(ghostDir[i]==1 || ghostDir[i]==3) {
                                 wayAvailable = true;
@@ -378,7 +381,7 @@ public class GameController  implements Initializable, Runnable {
                     if (map[boxY + 1][boxX] != '#') {
                         if (map[boxY + 1][boxX] == 'X') {
                             gateDir = 3;
-                            System.out.println("GATE: "+gateDir);
+                            System.out.println("4 GATE: "+gateDir);
                         } else {
                             if(ghostDir[i]==0 || ghostDir[i]==2) {
                                 wayAvailable = true;
@@ -706,7 +709,7 @@ public class GameController  implements Initializable, Runnable {
                 }
             }
 
-            System.out.println("GATE: "+gateDir);
+            System.out.println("5 GATE: "+gateDir);
 
             if(ghostDir[i]==0){
                 ghostPos[i][0] = ghostPos[i][0] + ghostSpeed;
@@ -793,19 +796,21 @@ public class GameController  implements Initializable, Runnable {
             this.setWidth(width);
             this.setHeight(height);
             try {
-                InputStream in = getClass().getResourceAsStream("assets/Map.txt");
+                InputStream in = getClass().getResourceAsStream("/assets/Map.txt");
                 BufferedReader fr = new BufferedReader(new InputStreamReader(in));
                 //BufferedReader fr = new BufferedReader(new InputStreamReader(Class.forName("com.blogspot.terminalcoders.GameController").getClassLoader().getResourceAsStream(this.getClass().getResource("assets/Map.txt").toString())));
                 //FileReader fr = new FileReader(new File(this.getClass().getResource("assets/Map.txt").toURI()));
                 int i = 0, j = 0, x;
                 while ((x = fr.read()) != -1) {
-                    if (x == 13) {
-                        j = 0;
-                        i++;
+                    if (x == 10) { // Carriage return
+                        j = 0;     // Reset column index
+                        i++;       // Move to the next row
                         System.out.println();
-                    } else if (x != 10) {
-                        map[i][j++] = (char) x;
-                        System.out.print(map[i][j-1]+":["+i+","+(j-1)+"] ");
+                    } else if (x != 13) { // Ignore line feed
+                        if (i < colY && j < rowX) {
+                            map[i][j++] = (char) x;
+                            System.out.print(map[i][j - 1] + ":[" + i + "," + (j - 1) + "] ");
+                        }
                     }
                 }
             } catch (Exception ex){
